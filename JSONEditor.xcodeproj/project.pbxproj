@@ -19,6 +19,9 @@
 		2C421A4819AE3809001772CB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C421A2419AE3809001772CB /* Cocoa.framework */; };
 		2C421A5019AE3809001772CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C421A4E19AE3809001772CB /* InfoPlist.strings */; };
 		2C421A5219AE3809001772CB /* JSONEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C421A5119AE3809001772CB /* JSONEditorTests.m */; };
+		AAB88FF819FFC89E0052E3F8 /* N4StylesReader.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB88FF719FFC89E0052E3F8 /* N4StylesReader.m */; };
+		AAB88FFB19FFC9B60052E3F8 /* NSData+N4.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB88FFA19FFC9B60052E3F8 /* NSData+N4.m */; };
+		AAB88FFD19FFCA060052E3F8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB88FFC19FFCA060052E3F8 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +55,11 @@
 		2C421A4D19AE3809001772CB /* JSONEditorTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JSONEditorTests-Info.plist"; sourceTree = "<group>"; };
 		2C421A4F19AE3809001772CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2C421A5119AE3809001772CB /* JSONEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSONEditorTests.m; sourceTree = "<group>"; };
+		AAB88FF619FFC89E0052E3F8 /* N4StylesReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4StylesReader.h; sourceTree = "<group>"; };
+		AAB88FF719FFC89E0052E3F8 /* N4StylesReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N4StylesReader.m; sourceTree = "<group>"; };
+		AAB88FF919FFC9B60052E3F8 /* NSData+N4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+N4.h"; sourceTree = "<group>"; };
+		AAB88FFA19FFC9B60052E3F8 /* NSData+N4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+N4.m"; sourceTree = "<group>"; };
+		AAB88FFC19FFCA060052E3F8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAB88FFD19FFCA060052E3F8 /* libz.dylib in Frameworks */,
 				2C421A2519AE3809001772CB /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,6 +106,7 @@
 		2C421A2319AE3809001772CB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AAB88FFC19FFCA060052E3F8 /* libz.dylib */,
 				2C421A2419AE3809001772CB /* Cocoa.framework */,
 				2C421A4619AE3809001772CB /* XCTest.framework */,
 				2C421A2619AE3809001772CB /* Other Frameworks */,
@@ -123,6 +133,10 @@
 				2C421A3C19AE3809001772CB /* MainMenu.xib */,
 				2C421A3F19AE3809001772CB /* Images.xcassets */,
 				2C421A2B19AE3809001772CB /* Supporting Files */,
+				AAB88FF619FFC89E0052E3F8 /* N4StylesReader.h */,
+				AAB88FF719FFC89E0052E3F8 /* N4StylesReader.m */,
+				AAB88FF919FFC9B60052E3F8 /* NSData+N4.h */,
+				AAB88FFA19FFC9B60052E3F8 /* NSData+N4.m */,
 			);
 			path = JSONEditor;
 			sourceTree = "<group>";
@@ -257,7 +271,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAB88FF819FFC89E0052E3F8 /* N4StylesReader.m in Sources */,
 				2C421A3819AE3809001772CB /* N4Document.m in Sources */,
+				AAB88FFB19FFC9B60052E3F8 /* NSData+N4.m in Sources */,
 				2C421A3119AE3809001772CB /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -479,6 +495,7 @@
 				2C421A5719AE3809001772CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2C421A5819AE3809001772CB /* Build configuration list for PBXNativeTarget "JSONEditorTests" */ = {
 			isa = XCConfigurationList;
@@ -487,6 +504,7 @@
 				2C421A5A19AE3809001772CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

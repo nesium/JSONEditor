@@ -7,7 +7,7 @@
 //
 
 #import "N4Document.h"
-
+#import "N4StylesReader.h"
 @interface N4Document () <NSTableViewDataSource>
 @end
 
@@ -62,7 +62,27 @@
     return obj != nil;
 }
 
+- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
+{
+    if( [typeName isEqualToString:@"iOSBinary"])
+    {
+        // we need to read the keys file
+        [N4StylesReader readKeysFromURL:absoluteURL error:outError];
+        if( outError && *outError )
+            return NO;
 
+        id obj = [N4StylesReader readStylesFromURL:absoluteURL error:outError];
+
+        if( obj != nil )
+            _rootNode = [N4JSONNode JSONNodeWithKey:@"<root>" object:obj];
+
+        return obj != nil;
+    }
+    else
+    {
+        return [self readFromData:[NSData dataWithContentsOfURL:absoluteURL] ofType:typeName error:outError];
+    }
+}
 
 #pragma mark - NSOutlineViewDataSource Methods
 
