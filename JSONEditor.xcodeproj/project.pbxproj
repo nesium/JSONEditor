@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C1F5C061B305F360013D951 /* N4MenuOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1F5C051B305F360013D951 /* N4MenuOutlineView.m */; };
 		2C421A2519AE3809001772CB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C421A2419AE3809001772CB /* Cocoa.framework */; };
 		2C421A2F19AE3809001772CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C421A2D19AE3809001772CB /* InfoPlist.strings */; };
 		2C421A3119AE3809001772CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C421A3019AE3809001772CB /* main.m */; };
@@ -35,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C1F5C041B305F360013D951 /* N4MenuOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4MenuOutlineView.h; sourceTree = "<group>"; };
+		2C1F5C051B305F360013D951 /* N4MenuOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N4MenuOutlineView.m; sourceTree = "<group>"; };
 		2C421A2119AE3809001772CB /* JSONEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSONEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C421A2419AE3809001772CB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2C421A2719AE3809001772CB /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -129,14 +132,16 @@
 			children = (
 				2C421A3619AE3809001772CB /* N4Document.h */,
 				2C421A3719AE3809001772CB /* N4Document.m */,
+				2C1F5C041B305F360013D951 /* N4MenuOutlineView.h */,
+				2C1F5C051B305F360013D951 /* N4MenuOutlineView.m */,
 				2C421A3919AE3809001772CB /* N4Document.xib */,
 				2C421A3C19AE3809001772CB /* MainMenu.xib */,
 				2C421A3F19AE3809001772CB /* Images.xcassets */,
-				2C421A2B19AE3809001772CB /* Supporting Files */,
 				AAB88FF619FFC89E0052E3F8 /* N4StylesReader.h */,
 				AAB88FF719FFC89E0052E3F8 /* N4StylesReader.m */,
 				AAB88FF919FFC9B60052E3F8 /* NSData+N4.h */,
 				AAB88FFA19FFC9B60052E3F8 /* NSData+N4.m */,
+				2C421A2B19AE3809001772CB /* Supporting Files */,
 			);
 			path = JSONEditor;
 			sourceTree = "<group>";
@@ -271,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C1F5C061B305F360013D951 /* N4MenuOutlineView.m in Sources */,
 				AAB88FF819FFC89E0052E3F8 /* N4StylesReader.m in Sources */,
 				2C421A3819AE3809001772CB /* N4Document.m in Sources */,
 				AAB88FFB19FFC9B60052E3F8 /* NSData+N4.m in Sources */,

@@ -8,8 +8,16 @@
 
 #import "N4Document.h"
 #import "N4StylesReader.h"
+#import "N4MenuOutlineView.h"
+
 @interface N4Document () <NSTableViewDataSource>
 @end
+
+typedef NS_ENUM(NSUInteger, N4JSONType) {
+    N4JSONTypeUndefined,
+    N4JSONTypeArray,
+    N4JSONTypeDictionary
+};
 
 @interface N4JSONNode : NSObject
 + (instancetype)JSONNodeWithKey:(NSString *)key object:(id)object;
@@ -19,20 +27,14 @@
 @property (nonatomic, readonly) NSUInteger numberOfChildren;
 
 - (N4JSONNode *)childAtIndex:(NSUInteger)idx;
+
+- (BOOL)writeToURL:(NSURL *)anURL error:(NSError **)error;
 @end
+
 
 @implementation N4Document
 {
     N4JSONNode *_rootNode;
-}
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        // Add your subclass-specific initialization here.
-    }
-    return self;
 }
 
 - (NSString *)windowNibName
@@ -84,6 +86,8 @@
     }
 }
 
+
+
 #pragma mark - NSOutlineViewDataSource Methods
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(N4JSONNode *)item
@@ -121,6 +125,62 @@
     
     return @"???";
 }
+
+- (NSMenu *)outlineView:(N4MenuOutlineView *)outlineView
+    menuInRow:(NSInteger)row column:(NSTableColumn *)column
+{
+    N4JSONNode *node = [outlineView itemAtRow:row];
+    
+    if (node.numberOfChildren == 0) {
+        return nil;
+    }
+    
+    NSMenu *menu = [[NSMenu alloc] init];
+    
+    NSMenuItem *menuItem = [[NSMenuItem alloc]
+        initWithTitle:[NSString stringWithFormat:@"Export '%@'…", node.name]
+        action:@selector(exportNode:)
+        keyEquivalent:@""];
+    menuItem.target = self;
+    menuItem.representedObject = node;
+    [menu addItem:menuItem];
+    
+    return menu;
+}
+
+
+
+#pragma mark - Action Methods
+
+- (void)exportNode:(NSMenuItem *)sender
+{
+    N4JSONNode *node = sender.representedObject;
+    
+    NSString *directoryPath = [[NSUserDefaults standardUserDefaults] valueForKey:@"SaveDirectory"];
+    if (directoryPath == nil) {
+        directoryPath = [@"~/Desktop" stringByExpandingTildeInPath];
+    }
+    
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    savePanel.allowedFileTypes = @[@"json"];
+    savePanel.allowsOtherFileTypes = NO;
+    [savePanel setExtensionHidden:NO];
+    [savePanel setDirectoryURL:[NSURL fileURLWithPath:directoryPath]];
+    [savePanel setNameFieldStringValue:node.name];
+    
+    if ([savePanel runModal] != NSOKButton) {
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setValue:savePanel.directoryURL.path
+        forKey:@"SaveDirectory"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    NSError *error;
+    if (![node writeToURL:savePanel.URL error:&error]) {
+        [self presentError:error];
+    }
+}
 @end
 
 
@@ -128,13 +188,16 @@
 @implementation N4JSONNode
 {
     NSArray *_childNodes;
+    N4JSONType _type;
 }
 
 + (instancetype)JSONNodeWithKey:(NSString *)key object:(id)object
 {
     NSMutableArray *childNodes;
+    N4JSONType jsonType = N4JSONTypeUndefined;
     
     if ([object isKindOfClass:[NSDictionary class]]) {
+        jsonType = N4JSONTypeDictionary;
         NSArray *keys = [[(NSDictionary *)object allKeys] sortedArrayUsingSelector:
         	@selector(caseInsensitiveCompare:)];
         childNodes = [NSMutableArray new];
@@ -145,6 +208,7 @@
         }
         object = [NSString stringWithFormat:@"%ld key/value pairs", ((NSDictionary *)object).count];
     } else if ([object isKindOfClass:[NSArray class]]) {
+        jsonType = N4JSONTypeArray;
         childNodes = [NSMutableArray new];
         
         NSUInteger count = ((NSArray *)object).count;
@@ -163,6 +227,7 @@
     node->_childNodes = [childNodes copy];
     node->_name = [key copy];
     node->_value = object;
+    node->_type = jsonType;
     
     return node;
 }
@@ -170,5 +235,43 @@
 - (N4JSONNode *)childAtIndex:(NSUInteger)idx
 {
     return _childNodes[idx];
+}
+
+- (id)rawValue
+{
+    switch (_type) {
+        case N4JSONTypeUndefined:
+            return _value;
+        
+        case N4JSONTypeArray: {
+            NSMutableArray *arr = [NSMutableArray new];
+            for (N4JSONNode *childNode in _childNodes) {
+                [arr addObject:[childNode rawValue]];
+            }
+            return arr;
+        }
+        
+        case N4JSONTypeDictionary: {
+            NSMutableDictionary *dict = [NSMutableDictionary new];
+            for (N4JSONNode *childNode in _childNodes) {
+                dict[childNode.name] = [childNode rawValue];
+            }
+            return dict;
+        }
+    }
+}
+
+- (BOOL)writeToURL:(NSURL *)anURL error:(NSError **)error
+{
+    BOOL success;
+    
+    NSOutputStream *outputStream = [NSOutputStream outputStreamWithURL:anURL append:NO];
+    
+    [outputStream open];
+    success = [NSJSONSerialization writeJSONObject:[self rawValue] toStream:outputStream
+    	options:NSJSONWritingPrettyPrinted error:error] > 0;
+    [outputStream close];
+    
+    return success;
 }
 @end
