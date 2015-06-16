@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, N4JSONType) {
 @property (nonatomic, readonly) NSUInteger numberOfChildren;
 
 - (N4JSONNode *)childAtIndex:(NSUInteger)idx;
+- (void)deleteChild:(id)aChild;
 
 - (BOOL)writeToURL:(NSURL *)anURL error:(NSError **)error;
 @end
@@ -148,6 +149,15 @@ typedef NS_ENUM(NSUInteger, N4JSONType) {
     return menu;
 }
 
+- (void)outlineView:(N4MenuOutlineView *)outlineView
+    shouldDeleteObjectInRow:(NSInteger)row
+{
+    N4JSONNode *node = [outlineView itemAtRow:row];
+    N4JSONNode *parentNode = [outlineView parentForItem:node];
+    [parentNode deleteChild:node];
+    [outlineView reloadData];
+}
+
 
 
 #pragma mark - Action Methods
@@ -187,7 +197,7 @@ typedef NS_ENUM(NSUInteger, N4JSONType) {
 
 @implementation N4JSONNode
 {
-    NSArray *_childNodes;
+    NSMutableArray *_childNodes;
     N4JSONType _type;
 }
 
@@ -224,7 +234,7 @@ typedef NS_ENUM(NSUInteger, N4JSONType) {
     
     N4JSONNode *node = [N4JSONNode new];
     node->_numberOfChildren = childNodes.count;
-    node->_childNodes = [childNodes copy];
+    node->_childNodes = childNodes;
     node->_name = [key copy];
     node->_value = object;
     node->_type = jsonType;
@@ -235,6 +245,16 @@ typedef NS_ENUM(NSUInteger, N4JSONType) {
 - (N4JSONNode *)childAtIndex:(NSUInteger)idx
 {
     return _childNodes[idx];
+}
+
+- (void)deleteChild:(id)aChild
+{
+    NSUInteger idx = [_childNodes indexOfObject:aChild];
+    if (idx == NSNotFound) {
+        return;
+    }
+    [_childNodes removeObject:aChild];
+    _numberOfChildren--;
 }
 
 - (id)rawValue

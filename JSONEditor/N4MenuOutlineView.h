@@ -16,7 +16,9 @@
 
 
 @protocol N4MenuOutlineViewDelegate
+@optional
 - (NSMenu *)outlineView:(N4MenuOutlineView *)outlineView
     menuInRow:(NSInteger)row column:(NSTableColumn *)column;
-@optional
+- (void)outlineView:(N4MenuOutlineView *)outlineView
+    shouldDeleteObjectInRow:(NSInteger)row;
 @end

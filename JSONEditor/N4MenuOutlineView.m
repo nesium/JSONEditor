@@ -29,4 +29,16 @@
     
     return nil;
 }
+
+- (void)keyDown:(NSEvent *)theEvent
+{
+    if (theEvent.keyCode == 51 && self.selectedRowIndexes.count > 0) {
+        if ([self.delegate respondsToSelector:@selector(outlineView:shouldDeleteObjectInRow:)]) {
+            [(id<N4MenuOutlineViewDelegate>)self.delegate outlineView:self
+            	shouldDeleteObjectInRow:self.selectedRowIndexes.firstIndex];
+            return;
+        }
+    }
+    [super keyDown:theEvent];
+}
 @end
