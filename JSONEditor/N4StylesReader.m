@@ -27,6 +27,7 @@ const uint16_t N4_BINARY_TYPE_ARRAY = 8;
 - (uint8_t)UInt8;
 - (int16_t)Int16;
 - (int32_t)Int32;
+- (int64_t)Int64;
 - (float)Float;
 -(NSData *)readDataOfLength:(NSUInteger)bytesToRead;
 -(NSString *)readStringWithEncoding:(NSStringEncoding)stringEncoding;
@@ -107,6 +108,15 @@ const uint16_t N4_BINARY_TYPE_ARRAY = 8;
     [self read:(uint8_t*)&internalValue length:sizeof(uint32_t)];
     internalValue = CFSwapInt32BigToHost(internalValue);
     int32_t* returnValue = (int32_t*)&internalValue;
+    return *returnValue;
+}
+
+- (int64_t)Int64
+{
+    uint64_t internalValue;
+    [self read:(uint8_t*)&internalValue length:sizeof(uint64_t)];
+    internalValue = CFSwapInt64BigToHost(internalValue);
+    int64_t* returnValue = (int64_t*)&internalValue;
     return *returnValue;
 }
 
@@ -210,7 +220,7 @@ static NSDictionary *_keys;
     NSUInteger keyCount = [reader Int32];
     while(keyCount--)
     {
-        int32_t uid = [reader Int32];
+        int64_t uid = [reader Int64];
         [keys setObject:[reader readStringWithEncoding:NSUTF8StringEncoding] forKey:@(uid)];
     }
 
@@ -252,7 +262,7 @@ static NSDictionary *_keys;
     if( type == 0 )
         return nil;
 
-    int32_t keyIndex = !array ? [reader Int32] : 0;
+    int64_t keyIndex = !array ? [reader Int64] : 0;
 
     if( key )
         *key = _keys[@(keyIndex)];
