@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, N4JSONType) {
 
 - (BOOL)writeToURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError *__autoreleasing *)outError
 {
-    return NO;
+    return [_rootNode writeToURL:url error:outError];
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
